@@ -44,12 +44,12 @@ namespace LoginAPI.Services
 
         public async Task<UserModel?> SignInAccount(SignInModel param)
         {
-            var username = await db.Users.FirstOrDefaultAsync(Q => Q.Username == param.Username);
-            if(username == null)
+            var data = await db.Users.FirstOrDefaultAsync(Q => Q.Username == param.Username);
+            if(data == null)
             {
                 return null;
             }
-            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(param.Password, username.Password);
+            bool isPasswordValid = BCrypt.Net.BCrypt.Verify(param.Password, data.Password);
             if (!isPasswordValid)
             {
                 return null;
@@ -58,7 +58,7 @@ namespace LoginAPI.Services
             var token = GenerateToken(param);
             return new UserModel
             {
-                Name = username.Name,
+                Name = data.Name,
                 Token = token
             };
         }

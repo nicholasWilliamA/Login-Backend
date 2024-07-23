@@ -25,7 +25,7 @@ namespace LoginAPI.Services
             }
             var newAccount = new User
             {
-                Name = param.Username,
+                Name = param.Name,
                 Username = param.Username,
                 Password = hashedPassword
             };
