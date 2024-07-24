@@ -8,4 +8,4 @@ First, change the connection string in the appsettings.json
 ```
 with your own PostgreSQL details
 
-Second, restore the DB Backup file on PGAdmin or other application
+Second, restore the DB Backup file on PGAdmin or other PostgreSQL application
