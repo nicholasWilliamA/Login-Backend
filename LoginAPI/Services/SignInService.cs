@@ -18,7 +18,11 @@ namespace LoginAPI.Services
             _configuration = configuration;
             this.db = dBContext;
         }
-
+        /// <summary>
+        /// Generate a JWT token for a given parameter.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         private string GenerateToken(SignInModel param)
         {
             var jwtSettings = new JwtSettings();
@@ -28,6 +32,7 @@ namespace LoginAPI.Services
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secretKey);
+            // Create the token descriptor which contains the token configuration.
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -42,8 +47,14 @@ namespace LoginAPI.Services
             return tokenHandler.WriteToken(token);
         }
 
+        /// <summary>
+        /// Sign in function that check if the username and password from parameter match the database.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public async Task<UserModel?> SignInAccount(SignInModel param)
         {
+            //Get data from database that match the username from parameter.
             var data = await db.Users.FirstOrDefaultAsync(Q => Q.Username == param.Username);
             if(data == null)
             {

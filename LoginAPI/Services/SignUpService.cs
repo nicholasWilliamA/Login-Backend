@@ -12,17 +12,20 @@ namespace LoginAPI.Services
         {
             this.db = db;
         }
-
+        /// <summary>
+        /// Create a new account for user and store it in the database.
+        /// </summary>
+        /// <param name="param"></param>
+        /// <returns></returns>
         public async Task<string> CreateNewAccount(SignUpModel param)
         {
-            string salt = BCrypt.Net.BCrypt.GenerateSalt();
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(param.Password, salt);
-            var checkExistingAccount = await db.Users.Where(Q => Q.Username == param.Username)
-                                                       .Select(Q => Q.Username).FirstOrDefaultAsync();
-            if(checkExistingAccount != null)
+            var checkExistingAccount = await db.Users.AnyAsync(Q => Q.Username == param.Username);
+            if(checkExistingAccount)
             {
                 return "Username has been taken!";
             }
+            string salt = BCrypt.Net.BCrypt.GenerateSalt();
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(param.Password, salt);
             var newAccount = new User
             {
                 Name = param.Name,

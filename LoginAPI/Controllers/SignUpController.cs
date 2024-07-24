@@ -19,6 +19,10 @@ namespace LoginAPI.Controllers
             try
             {
                 var result = await SignUpServices.CreateNewAccount(param);
+                if(result == "Username has been taken!")
+                {
+                    return BadRequest(result);
+                }
                 return Ok(result);
             } catch (Exception ex)
             {
